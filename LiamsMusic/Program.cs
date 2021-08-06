@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +15,23 @@ namespace LiamsMusic
 		[STAThread]
 		static void Main()
 		{
+			if (!SingleInstance.Start())
+			{
+				return;
+			}
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+			try
+			{
+				MainForm mainForm = new MainForm();
+				Application.Run(mainForm);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message);
+			}
+
+			SingleInstance.Stop();
 		}
 	}
 }

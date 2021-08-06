@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WMPLib;
+using YoutubeExtractor;
+using System.Net;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
 
 namespace LiamsMusic
 {
@@ -17,7 +18,7 @@ namespace LiamsMusic
 		WMPLib.WindowsMediaPlayer Player=new WMPLib.WindowsMediaPlayer();
 		List<Song> paths = new List<Song>();
 		List<Song> pathsOrdered = new List<Song>();
-		string CurrentSong = "";
+		string CurrentSong = "";	
 		public MainForm()
 		{
 			Player.settings.volume = LiamsMusic.Properties.Settings.Default.vol;
@@ -166,6 +167,39 @@ namespace LiamsMusic
 			Player.settings.volume=slider.Value;
 			LiamsMusic.Properties.Settings.Default.vol=slider.Value;
 		}
+		private void btnGetMore_Click(object sender, EventArgs e)
+		{
+			//DownloadVideo("https://www.youtube.com/watch?v=2ZIpFytCSVc");
+			DownloadVideo("https://www.youtube.com/watch?v=9CBPnduL9LQ");
+		}
+		private async void DownloadVideo(string url)
+		{
+			IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
+			VideoInfo video = videoInfos.Where(info => info.CanExtractAudio).OrderByDescending(info => info.AudioBitrate).First();
+			if (video.RequiresDecryption)
+			{
+				DownloadUrlResolver.DecryptDownloadUrl(video);
+			}
+			var audioDownloader = new AudioDownloader(video, Path.Combine(LiamsMusic.Properties.Settings.Default.basePath, video.Title + video.AudioExtension));
+			audioDownloader.Execute();
+		}
+		public static IEnumerable<VideoInfo> GetDownloadUrls(string videoUrl, bool decryptSignature = true)
+		{
+			var json = LoadJson(videoUrl);
+			string videoTitle = GetVideoTitle(json);
+			IEnumerable<ExtractionInfo> downloadUrls = ExtractDownloadUrls(json);
+			IEnumerable<VideoInfo> infos = GetVideoInfos(downloadUrls, videoTitle).ToList();
+			string htmlPlayerVersion = GetHtml5PlayerVersion(json);
+			foreach (VideoInfo info in infos)
+			{
+				info.HtmlPlayerVersion = htmlPlayerVersion;
+				if (decryptSignature && info.RequiresDecryption)
+				{
+					DecryptDownloadUrl(info);
+				}
+			}
+			return infos;
+		}	
 	}
 	public class Song
 	{

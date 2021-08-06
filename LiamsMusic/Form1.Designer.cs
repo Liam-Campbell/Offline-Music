@@ -39,6 +39,7 @@ namespace LiamsMusic
 			this.btnSkip = new System.Windows.Forms.Button();
 			this.btnPlay = new System.Windows.Forms.Button();
 			this.slider = new System.Windows.Forms.TrackBar();
+			this.btnGetMore = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.slider)).BeginInit();
 			this.SuspendLayout();
@@ -124,12 +125,23 @@ namespace LiamsMusic
 			this.slider.TabIndex = 8;
 			this.slider.ValueChanged += new System.EventHandler(this.slider_ValueChanged);
 			// 
+			// btnGetMore
+			// 
+			this.btnGetMore.Location = new System.Drawing.Point(493, 8);
+			this.btnGetMore.Name = "btnGetMore";
+			this.btnGetMore.Size = new System.Drawing.Size(73, 23);
+			this.btnGetMore.TabIndex = 9;
+			this.btnGetMore.Text = "Get More..";
+			this.btnGetMore.UseVisualStyleBackColor = true;
+			this.btnGetMore.Click += new System.EventHandler(this.btnGetMore_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = global::LiamsMusic.Properties.Resources.XDJ4aT;
 			this.ClientSize = new System.Drawing.Size(800, 393);
+			this.Controls.Add(this.btnGetMore);
 			this.Controls.Add(this.slider);
 			this.Controls.Add(this.btnSkip);
 			this.Controls.Add(this.label1);
@@ -159,6 +171,7 @@ namespace LiamsMusic
 		private System.Windows.Forms.Button btnSkip;
 		private System.Windows.Forms.NotifyIcon notifyIcon1;
 		private System.Windows.Forms.TrackBar slider;
+		private System.Windows.Forms.Button btnGetMore;
 	}
 }
 

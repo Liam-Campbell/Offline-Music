@@ -25,7 +25,7 @@ namespace LiamsMusic.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\Chrome_Downloads\\Songs")]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\Chrome_Downloads\\Songs\\")]
         public string basePath {
             get {
                 return ((string)(this["basePath"]));
